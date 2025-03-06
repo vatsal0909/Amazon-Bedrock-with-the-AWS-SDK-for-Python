@@ -1,39 +1,61 @@
-# Amazon-Bedrock-with-the-AWS-SDK-for-Python
+# Comparing Model Responses in AWS Bedrock Using Boto3
 
-# step1 
-importing required library
+## Overview
+This document explains the steps taken to invoke **Amazon Bedrock** models using `boto3`, experiment with different prompts, and compare the responses of two different **Titan** models.
 
-boto3 for accesing bedrock api
-json to convert response return from the llm model
+---
 
-# step2
-connecting bedrock with boto3 
+## 1️⃣ Connecting to Bedrock Runtime
+- Established a connection with **AWS Bedrock Runtime** using `boto3`.
+- Configured the client with the appropriate service name and region.
 
-# step3 
-assigning model Id
+---
 
-# step4
-Giving prompt
+## 2️⃣ Invoking `amazon.titan-text-express-v1`
 
-# step 5
-Providing Payload to define model behaviour 
-for example: temprature, top p , top k, stopping sequence
-eaxh model have differnet payload
+### **Prompt 1: General Conversation**
+- Sent a basic prompt: **"Hello, how are you?"**
+- Defined a payload specifying:
+  - The input text.
+  - Model parameters such as **max token count, temperature, and topP**.
+- Received a response where the model provided a **detailed explanation of empathy**, instead of answering conversationally.
 
-# step 6
-Model invokation using .ivoke() function 
+### **Prompt 2: C++ Bubble Sort Algorithm**
+- Changed the prompt to **"Write me code to perform bubble sort algorithm in C++ language?"**.
+- Modified the payload to:
+  - Lower the **temperature** for more deterministic output.
+  - Keep **topP** at 1.
+- The model successfully generated **valid C++ code for the Bubble Sort algorithm**.
 
-# step 7
-extracting response from the bedrock using json.read() to get output from  the model
+---
 
-# step 8
-changing model to compare output, and examine the perfomance in terms of time and generated output
+## 3️⃣ Comparing with `amazon.titan-text-lite-v1`
+- Used the same prompt **"Write me code to perform bubble sort algorithm in C++ language?"** with a different model.
+- Adjusted the payload by setting the **temperature to 0** for a deterministic response.
+- The model **refused to generate the response**, instead returning a message indicating it could not process the request.
 
-# output analysis
+---
 
-while using amazon titan express,
-it responded in 10-15 seconds, and generated output was incomplete
+## 4️⃣ Observations & Conclusion
 
-while using amazon titan lite
-Response: Sorry - this model is unable to respond to this request.
+| Model | Prompt | Response |
+|--------|-------------------------|----------------------------|
+| **Titan-Express** | "Hello, how are you?" | Provided a detailed explanation of empathy. |
+| **Titan-Express** | C++ Bubble Sort | Successfully generated valid C++ code. |
+| **Titan-Lite** | C++ Bubble Sort | Refused to generate a response. |
 
+### **Key Takeaways**
+- **Titan-Express performed better** in both general conversation and code generation.
+- **Titan-Lite appears to have stricter content policies** or **fewer capabilities**.
+- Adjusting model parameters like **temperature and topP** can impact response quality.
+
+---
+
+## Next Steps
+- Test additional models like **Claude, Llama2, and Jurassic** for a broader comparison.
+- Experiment with different **temperature, topP, and max token count** values to analyze output variations.
+- Consider using **Bedrock Knowledge Bases** for domain-specific, fine-tuned responses.
+
+---
+
+📌 **This document helps understand how different models behave with the same input.** Let me know if further refinements or experiments are needed! 🚀
